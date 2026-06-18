@@ -65,15 +65,10 @@ npm run build
 
 也可以通过注册页面创建新用户。
 
-## 面试讲解点
+## 业务功能
 
 - 使用路由守卫保护购物车、订单、支付等登录后页面。
 - 通过 Pinia 管理用户登录状态、搜索状态和购物车状态。
 - 商品分类与商品列表解耦，支持一级/二级分类筛选。
 - 购物车和订单流程完整，能串联到后端库存锁定和支付逻辑。
 - AI 客服作为业务增强功能，可展示 Spring AI RAG 能力在前台的使用场景。
-# Vue 3 + Vite
-
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
-
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).

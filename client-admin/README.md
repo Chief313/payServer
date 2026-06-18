@@ -76,15 +76,10 @@ npm run build
 | `/users` | 用户管理 |
 | `/knowledge` | 知识库管理 |
 
-## 面试讲解点
+## 业务功能
 
 - 后台使用 Element Plus 构建表格、弹窗、表单、分页等典型管理系统交互。
 - 路由守卫结合本地 Token 判断登录态，避免未登录访问后台页面。
 - 用户管理、商品管理、订单管理覆盖常见后台 CRUD 场景。
 - 知识库管理展示了从文件上传到后端向量化处理的 AI 管理闭环。
 - 仪表盘使用 ECharts 展示运营数据，体现数据可视化能力。
-# Vue 3 + Vite
-
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
-
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).

@@ -156,7 +156,7 @@ Authorization: Bearer <token>
 | `POST` | `/api/v1/admin/ai/knowledge/upload` | 上传知识库文档 |
 | `POST` | `/api/v1/ai/chat` | AI 客服对话 |
 
-## 面试讲解点
+## 业务功能
 
 - 使用统一 `Result` 和 `PageResult` 规范 API 返回结构。
 - 使用 `GlobalExceptionHandler` 统一处理业务异常和系统异常。
