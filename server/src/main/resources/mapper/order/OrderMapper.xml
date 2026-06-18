@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.payserver.module.order.mapper.OrderMapper">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_order (order_no, user_id, total_amount, pay_amount, status, address_snapshot)
+        VALUES (#{orderNo}, #{userId}, #{totalAmount}, #{payAmount}, #{status}, #{addressSnapshot})
+    </insert>
+
+    <select id="findById" resultType="com.payserver.module.order.model.entity.Order">
+        SELECT id, order_no, user_id, total_amount, pay_amount, status, address_snapshot,
+               pay_time, ship_time, complete_time, create_time, update_time
+        FROM t_order
+        WHERE id = #{id}
+    </select>
+
+    <select id="findByOrderNo" resultType="com.payserver.module.order.model.entity.Order">
+        SELECT id, order_no, user_id, total_amount, pay_amount, status, address_snapshot,
+               pay_time, ship_time, complete_time, create_time, update_time
+        FROM t_order
+        WHERE order_no = #{orderNo}
+    </select>
+
+    <select id="listByUserId" resultType="com.payserver.module.order.model.entity.Order">
+        SELECT id, order_no, user_id, total_amount, pay_amount, status, address_snapshot,
+               pay_time, ship_time, complete_time, create_time, update_time
+        FROM t_order
+        WHERE user_id = #{userId}
+        ORDER BY create_time DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="countByUserId" resultType="long">
+        SELECT COUNT(*) FROM t_order WHERE user_id = #{userId}
+    </select>
+
+    <select id="adminList" resultType="com.payserver.module.order.model.entity.Order">
+        SELECT id, order_no, user_id, total_amount, pay_amount, status, address_snapshot,
+               pay_time, ship_time, complete_time, create_time, update_time
+        FROM t_order
+        <where>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="adminCount" resultType="long">
+        SELECT COUNT(*) FROM t_order
+        <where>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateStatus">
+        UPDATE t_order SET status = #{status} WHERE id = #{id}
+    </update>
+
+    <update id="updatePaid">
+        UPDATE t_order
+        SET status     = 'PAID',
+            pay_amount = #{payAmount},
+            pay_time   = #{payTime}
+        WHERE order_no = #{orderNo}
+          AND status = 'PENDING_PAY'
+    </update>
+
+    <update id="updateShipped">
+        UPDATE t_order
+        SET status    = 'SHIPPED',
+            ship_time = #{shipTime}
+        WHERE id = #{id}
+          AND status = 'PAID'
+    </update>
+
+    <select id="listTimeoutOrders" resultType="com.payserver.module.order.model.entity.Order">
+        SELECT id, order_no, user_id, total_amount, pay_amount, status, address_snapshot,
+               pay_time, ship_time, complete_time, create_time, update_time
+        FROM t_order
+        WHERE status = #{status}
+          AND create_time &lt; #{deadline}
+    </select>
+</mapper>

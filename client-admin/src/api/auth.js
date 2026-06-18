@@ -1,0 +1,5 @@
+import request from './request'
+
+export function login(data) {
+  return request.post('/v1/auth/login', data)
+}

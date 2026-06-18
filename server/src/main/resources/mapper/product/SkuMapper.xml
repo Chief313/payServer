@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.payserver.module.product.mapper.SkuMapper">
+
+    <select id="findById" resultType="com.payserver.module.product.model.entity.Sku">
+        SELECT id, product_id, sku_name, price, stock, locked_stock, create_time
+        FROM sku
+        WHERE id = #{id}
+    </select>
+
+    <select id="findDetailById" resultType="com.payserver.module.product.model.entity.SkuDetail">
+        SELECT s.id          AS skuId,
+               s.product_id  AS productId,
+               p.name        AS productName,
+               s.sku_name    AS skuName,
+               s.price,
+               s.stock,
+               p.status      AS productStatus
+        FROM sku s
+                 INNER JOIN product p ON s.product_id = p.id
+        WHERE s.id = #{id}
+    </select>
+
+    <update id="lockStock">
+        UPDATE sku
+        SET stock        = stock - #{quantity},
+            locked_stock = locked_stock + #{quantity}
+        WHERE id = #{skuId}
+          AND stock >= #{quantity}
+    </update>
+
+    <update id="unlockStock">
+        UPDATE sku
+        SET stock        = stock + #{quantity},
+            locked_stock = locked_stock - #{quantity}
+        WHERE id = #{skuId}
+          AND locked_stock >= #{quantity}
+    </update>
+
+    <update id="confirmLockedStock">
+        UPDATE sku
+        SET locked_stock = locked_stock - #{quantity}
+        WHERE id = #{skuId}
+          AND locked_stock >= #{quantity}
+    </update>
+</mapper>

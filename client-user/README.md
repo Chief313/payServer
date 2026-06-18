@@ -1,0 +1,79 @@
+# client-user 用户端商城
+
+`client-user` 是 PayServer 的用户端商城前端，面向普通消费者，负责商品浏览、搜索、购物车、订单支付和 AI 客服等交互。
+
+## 技术栈
+
+- Vue 3
+- Vue Router
+- Pinia
+- Axios
+- Vite
+
+## 功能模块
+
+- 首页：滚动广告、商品分类、商品列表、关键词搜索
+- 商品详情：商品信息、SKU 选择、库存展示、加入购物车
+- 用户认证：登录、注册、Token 持久化
+- 购物车：商品数量调整、勾选结算、删除商品
+- 订单：创建订单、订单列表、订单支付
+- 支付：对接后端支付宝沙箱支付接口
+- 客服：AI 智能客服页面和悬浮入口
+
+## 目录结构
+
+```text
+src/
+├── api/          # Axios 请求封装与业务接口
+├── components/   # 通用组件，如商品卡片、广告、客服入口
+├── layout/       # 用户端整体布局
+├── router/       # 路由配置与登录守卫
+├── stores/       # Pinia 状态，如用户、购物车、搜索
+├── utils/        # 工具函数
+└── views/        # 页面组件
+```
+
+## 本地启动
+
+后端服务默认运行在 `http://localhost:8081`，Vite 代理已配置到该地址。
+
+```bash
+npm install
+npm run dev
+```
+
+默认访问地址：
+
+```text
+http://localhost:5173
+```
+
+## 构建
+
+```bash
+npm run build
+```
+
+## 登录账号
+
+数据库初始化后可使用：
+
+```text
+用户名：user01
+密码：123456
+```
+
+也可以通过注册页面创建新用户。
+
+## 面试讲解点
+
+- 使用路由守卫保护购物车、订单、支付等登录后页面。
+- 通过 Pinia 管理用户登录状态、搜索状态和购物车状态。
+- 商品分类与商品列表解耦，支持一级/二级分类筛选。
+- 购物车和订单流程完整，能串联到后端库存锁定和支付逻辑。
+- AI 客服作为业务增强功能，可展示 Spring AI RAG 能力在前台的使用场景。
+# Vue 3 + Vite
+
+This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+
+Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).

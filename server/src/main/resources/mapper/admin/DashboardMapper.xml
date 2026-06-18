@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.payserver.module.admin.mapper.DashboardMapper">
+
+    <select id="countUsers" resultType="long">
+        SELECT COUNT(*) FROM sys_user WHERE role = 'USER'
+    </select>
+
+    <select id="countOrders" resultType="long">
+        SELECT COUNT(*) FROM t_order
+    </select>
+
+    <select id="sumSales" resultType="java.math.BigDecimal">
+        SELECT IFNULL(SUM(pay_amount), 0)
+        FROM t_order
+        WHERE status IN ('PAID', 'SHIPPED', 'COMPLETED')
+    </select>
+
+    <select id="countTodayOrders" resultType="long">
+        SELECT COUNT(*)
+        FROM t_order
+        WHERE DATE(create_time) = CURDATE()
+    </select>
+
+    <select id="orderTrendLast7Days" resultType="com.payserver.module.admin.model.dto.TrendItem">
+        SELECT DATE_FORMAT(d.day, '%Y-%m-%d') AS date,
+               IFNULL(COUNT(o.id), 0)         AS value
+        FROM (SELECT CURDATE() - INTERVAL seq DAY AS day
+              FROM (SELECT 0 AS seq UNION SELECT 1 UNION SELECT 2 UNION SELECT 3
+                    UNION SELECT 4 UNION SELECT 5 UNION SELECT 6) days) d
+                 LEFT JOIN t_order o ON DATE(o.create_time) = d.day
+        GROUP BY d.day
+        ORDER BY d.day
+    </select>
+
+    <select id="salesTrendLast7Days" resultType="com.payserver.module.admin.model.dto.TrendItem">
+        SELECT DATE_FORMAT(d.day, '%Y-%m-%d') AS date,
+               IFNULL(SUM(o.pay_amount), 0)   AS value
+        FROM (SELECT CURDATE() - INTERVAL seq DAY AS day
+              FROM (SELECT 0 AS seq UNION SELECT 1 UNION SELECT 2 UNION SELECT 3
+                    UNION SELECT 4 UNION SELECT 5 UNION SELECT 6) days) d
+                 LEFT JOIN t_order o ON DATE(o.pay_time) = d.day
+            AND o.status IN ('PAID', 'SHIPPED', 'COMPLETED')
+        GROUP BY d.day
+        ORDER BY d.day
+    </select>
+
+    <select id="topProductsTop5" resultType="com.payserver.module.admin.model.dto.RankItem">
+        SELECT oi.product_name AS name,
+               SUM(oi.quantity) AS value
+        FROM order_item oi
+                 INNER JOIN t_order o ON oi.order_id = o.id
+        WHERE o.status IN ('PAID', 'SHIPPED', 'COMPLETED')
+        GROUP BY oi.product_id, oi.product_name
+        ORDER BY value DESC
+        LIMIT 5
+    </select>
+</mapper>

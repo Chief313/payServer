@@ -1,0 +1,58 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: server
+  datasource:
+    url: jdbc:mysql://localhost:3306/payserver_db?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      client-type: jedis
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+  ai:
+    openai:
+      base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
+      api-key: ${DASHSCOPE_API_KEY}
+      chat:
+        model: qwen3.7-plus
+      embedding:
+        model: text-embedding-v4
+    vectorstore:
+      redis:
+        initialize-schema: true
+        index-name: payserver-knowledge
+        prefix: "ai:doc:"
+
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: com.payserver.module
+  configuration:
+    map-underscore-to-camel-case: true
+
+jwt:
+  secret: payserver-jwt-secret-key-2025-very-long-string
+  expire-hours: 2
+
+alipay:
+  sandbox: true
+  app-id: ${ALIPAY_APP_ID:your-sandbox-app-id}
+  private-key: ${ALIPAY_PRIVATE_KEY:your-app-private-key}
+  alipay-public-key: ${ALIPAY_PUBLIC_KEY:your-alipay-public-key}
+  notify-url: http://localhost:8080/api/v1/user/payment/alipay/notify
+  return-url: http://localhost:5173/order/result
+  gateway-url: https://openapi-sandbox.dl.alipaydev.com/gateway.do
+
+knowledge:
+  upload-dir: ./data/knowledge
+
+pic:
+  upload-dir: ../picserver
